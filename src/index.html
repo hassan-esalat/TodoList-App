@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/css/fonts.css">
+    <link rel="stylesheet" href="../src/css/style.css">
+    <title>TodoList app</title>
+</head>
+<body>
+    
+     <div class="container app">
+        <div class="app__header"></div>
+
+        <div class="app__content">
+              <div class="update-modal hide">
+                <h3>ویرایش</h3>
+                
+                <div class="update-header">
+                    <label>عنوان :</label>
+                    <input type="text" class="input-val-update">
+                </div>
+                <p class="todo-date-created">
+                    <span>تاریخ ایجاد :</span>
+                    <span class="todo-date-created__data">1400</span>
+                </p>
+                <div class="update-btn">
+                    <button class="btn btn--primary todo-update-ok">ویرایش</button>
+                    <button class="btn btn--primary todo-exit">انصراف</button>
+                </div>
+
+              </div>
+            <div class="todo-app">
+                <form action="#" class="formTodo shadow">
+                    <div>
+                        <select class="filterSelect">
+                            <option value="all">تمام تسک ها </option>
+                            <option value="complete">انجام شده ها </option>
+                            <option value="unComplete">انجام نشده ها</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>اضافه کردن کار جدید :</label>
+                        <input type="text" class="todoInput" autofocus>
+                    </div>
+                    <button class="btn btn--primary add-todo-btn">افزودن</button>
+                </form>
+                <div class="todos-container">
+                    <!-- <div class="todo shadow complete">
+                        <p>وظیفه 1</p>
+                        <div class="todo__detail">
+                            <span>1403/02/11</span>
+                            <img src="../assets/images/icon/check.png" alt="">
+                            <img src="../assets/images/icon/trash.png" alt="">
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <script src="./js/app.js"></script>
+</body>
+</html>

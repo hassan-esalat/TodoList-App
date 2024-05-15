@@ -1,0 +1,221 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+:root {
+  --color-primary: #ff33ae;
+}
+.container {
+  max-width: 1140px;
+  margin: 50px auto;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.6rem;
+}
+.app {
+  width: 800px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.app__header {
+  background-color: var(--color-primary);
+  height: 150px;
+}
+.app__content {
+  border: 1px solid #ccc;
+  min-height: 200px;
+}
+.btn {
+  text-decoration: none;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 5px;
+  text-transform: capitalize;
+  font-family: vazir;
+}
+.btn--primary {
+  background-color: var(--color-primary);
+}
+.shadow {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.todo-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* filterSelect */
+.filterSelect {
+  cursor: pointer;
+}
+
+.formTodo {
+  padding: 2rem;
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: -50px;
+  background-color: #fff;
+  border-radius: 8px;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+.formTodo > button {
+  cursor: pointer;
+}
+.formTodo > div {
+  flex-grow: 1;
+}
+.formTodo > div label {
+  display: block;
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.todoInput,
+.filterSelect,
+.input-val-update {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  font-family: vazir;
+}
+.todo > p {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 570px;
+  padding: 2rem;
+  border-radius: 5px;
+  margin-block: 1.5rem;
+  margin-inline: 1rem;
+}
+.todo.complete p {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.18);
+  padding: 0.5rem 1rem;
+  width: 40%;
+  border-bottom: 1px solid transparent;
+}
+.todo > p:not(.todo.complete p) {
+  /* border:1px solid rgba(0, 0, 0, 0.26); */
+  padding: 0.5rem 1rem;
+  width: 40%;
+  /* border-radius: 0 5px 5px 0; */
+  border-bottom: 1px solid var(--color-primary);
+}
+
+.todo.complete {
+  box-shadow: 0 0 5px rgba(58, 180, 1, 0.8);
+  color: rgb(9, 151, 9);
+  background-color: rgba(9, 151, 9, 0.0522);
+}
+.todo__detail {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.todo__detail img {
+  height: 18px;
+  /* width: 18px; */
+  cursor: pointer;
+}
+.todo__detail span {
+  margin-bottom: -3px;
+  font-size: 1.4rem;
+  margin-left: 5rem;
+}
+.update-todo {
+  position: relative;
+  bottom: 1px;
+}
+
+/*  */
+.todos-container {
+  overflow-y: auto;
+  max-height: 320px;
+}
+.todos-container::-webkit-scrollbar {
+  /* display: none; */
+  background-color: #fff;
+}
+.todos-container::-webkit-scrollbar-thumb {
+  cursor: ns-resize;
+  /* background-color: #ff33ae; */
+  background-image: linear-gradient(60deg, #ff33ae, #1e093f);
+  /* border: 2px solid black; */
+  border-radius: 8px;
+}
+/* modal */
+
+.update-modal {
+  position: absolute;
+  width: 400px;
+  /* height: 250px; */
+  background-color: #ff33ad42;
+  z-index: 10;
+  padding: 2rem;
+  border-radius: 8px;
+  left: 50%;
+  transform: translate(-50%);
+  top: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 8px #ff33ada9;
+  transition: 0.5s;
+}
+.hide {
+  /* display: none; */
+  opacity: 0;
+  z-index: -10;
+}
+.update-modal h3 {
+  border-bottom: 2px solid #000;
+  width: 80%;
+  text-align: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.update-header {
+  width: 80%;
+}
+.update-header label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+.input-val-update {
+  width: 100%;
+}
+.todo-date-created {
+  margin-block: 1.5rem;
+}
+.update-btn {
+  margin-block: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  width: 80%;
+}
+.update-btn button {
+  cursor: pointer;
+  flex-grow: 1;
+  transition: 0.4s;
+}
+.update-btn button:hover {
+  opacity: 0.9;
+}
