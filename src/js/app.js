@@ -17,6 +17,11 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
 });
 
+// بستن مودال با کلیک روی پس‌زمینه
+updateModal.addEventListener("click", (e) => {
+    if (e.target === updateModal) closeModal();
+});
+
 filterSelect.addEventListener("change", (e) => {
     filterValue = e.target.value;
     filterTodos();
@@ -45,6 +50,7 @@ function escapeHtml(text) {
 }
 
 function filterTodos() {
+    updateStats();
     const todos = getTodos();
     switch (filterValue) {
         case "complete":
@@ -122,6 +128,20 @@ function saveEditedTodo() {
 }
 
 function updateUiTodo(todos) {
+    if (!todos.length) {
+        todosBox.innerHTML = filterValue === "all"
+            ? `<div class="empty-state">
+                 <span class="empty-state__icon">📋</span>
+                 <p>هنوز کاری ثبت نشده!</p>
+                 <small>اولین کارتو از فرم بالا اضافه کن 👆</small>
+               </div>`
+            : `<div class="empty-state">
+                 <span class="empty-state__icon">🔍</span>
+                 <p>کاری با این فیلتر پیدا نشد</p>
+               </div>`;
+        return;
+    }
+
     let result = "";
     todos.forEach((t) => {
         result += `<div class="todo shadow ${t.isComplete ? "complete" : ""}">
@@ -153,6 +173,15 @@ function updateUiTodo(todos) {
     todosBox.querySelectorAll(".update-todo").forEach((b) => {
         b.addEventListener("click", updateTodo);
     });
+}
+
+function updateStats() {
+    const todos = getTodos();
+    const done = todos.filter((t) => t.isComplete).length;
+    const statsDone = document.querySelector(".stats-done");
+    const statsTotal = document.querySelector(".stats-total");
+    if (statsDone) statsDone.textContent = done;
+    if (statsTotal) statsTotal.textContent = todos.length;
 }
 
 function getTodos() {
