@@ -1,4 +1,3 @@
-const addTodoBtn = document.querySelector(".add-todo-btn");
 const formTodo = document.querySelector(".formTodo");
 const todoInput = document.querySelector(".todoInput");
 const todosBox = document.querySelector(".todos-container");
@@ -9,167 +8,157 @@ const inputTitle = document.querySelector(".input-val-update");
 const todoUpdateOk = document.querySelector(".todo-update-ok");
 const todoExit = document.querySelector(".todo-exit");
 
-
 let filterValue = "all";
+let editingTodoId = null;
 
-todoExit.addEventListener('click',()=>{
-    updateModal.classList.add("hide");
-})
+todoExit.addEventListener("click", closeModal);
 
-filterSelect.addEventListener('change',(e)=>{
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+});
+
+filterSelect.addEventListener("change", (e) => {
     filterValue = e.target.value;
     filterTodos();
-})
-formTodo.addEventListener('submit',addTodo)
-document.addEventListener('DOMContentLoaded',()=>{
-    const todos = JSON.parse(localStorage.getItem("todos"));
-    updateUiTodo(todos)
-})
+});
 
-// let todos = [];
+formTodo.addEventListener("submit", addTodo);
 
-function filterTodos(e){
+document.addEventListener("DOMContentLoaded", () => {
+    filterTodos();
+});
 
-    // const filterOption = e.target.value;
-    
+// ثبت فقط یک‌باره‌ی listener دکمه‌ی ویرایش؛
+// قبلاً هر بار باز شدن مودال یک listener جدید اضافه می‌شد و listenerها تجمیع می‌شدند
+todoUpdateOk.addEventListener("click", saveEditedTodo);
+
+function closeModal() {
+    updateModal.classList.add("hide");
+    editingTodoId = null;
+}
+
+// جلوگیری از XSS: خروجی گرفتن از متن کاربر قبل از قرار دادن در innerHTML
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function filterTodos() {
     const todos = getTodos();
     switch (filterValue) {
-        case "all":{
-            updateUiTodo(todos)
-        }
+        case "complete":
+            updateUiTodo(todos.filter((t) => t.isComplete));
             break;
-        case "complete":{
-            const filteredTodo = todos.filter(t=>{
-                return t.isComplete; 
-            })
-            updateUiTodo(filteredTodo);
-        }
-   
+        case "unComplete":
+            updateUiTodo(todos.filter((t) => !t.isComplete));
             break;
-        case "unComplete":{
-
-            const filteredTodo = todos.filter(t=>{
-                return !t.isComplete; 
-            })
-            updateUiTodo(filteredTodo);
-            
-        }
-            break;
-    
         default:
-            updateUiTodo(todos)
+            updateUiTodo(todos);
             break;
     }
 }
 
-function addTodo(e){
+function addTodo(e) {
     e.preventDefault();
-    let inputVal = todoInput.value;
-    // console.log(new Date().toISOString());
-    if(!inputVal) return null;
+    const inputVal = todoInput.value.trim();
+    if (!inputVal) return;
+
     const todo = {
-        id : Date.now(),
-        title:inputVal,
-        createdAt : new Date().toISOString(),
-        isComplete : false
-    }
+        id: Date.now(),
+        title: inputVal,
+        createdAt: new Date().toISOString(),
+        isComplete: false
+    };
+
     const todos = getTodos();
-    todos.push(todo)
-    
-    saveTodos(todos)
-    filterTodos()
-
-
-
-}
-
-
-
-function delTodo(e){
-    let todos = getTodos();
-    const delId = parseInt(e.target.dataset.todoId);
-    console.log(delId);
-    todos =  todos.filter(t=>{
-        return t.id !== delId;
-    })
-    saveTodos(todos)
-    filterTodos()   
-}
-
-function checkTodo(e){
-    let todos = getTodos();
-    const checkId = parseInt(e.target.dataset.todoId);
-    const elParent = e.target.parentElement.parentElement;
-    elParent.classList.toggle("complete");
-    console.log();
-    const filteredTodo = todos.find(t=> t.id === checkId)
-    filteredTodo.isComplete = !filteredTodo.isComplete;
+    todos.push(todo);
     saveTodos(todos);
-    filterTodos()
+    // پاک کردن ورودی فقط بعد از افزودن تسک (نه در هر رندر)
+    todoInput.value = "";
+    filterTodos();
 }
 
+function delTodo(e) {
+    const delId = Number(e.target.dataset.todoId);
+    const todos = getTodos().filter((t) => t.id !== delId);
+    saveTodos(todos);
+    filterTodos();
+}
 
-function updateTodo(e){
-    let todos = getTodos();
-    console.log(todos);
-    const checkId = parseInt(e.target.dataset.todoId);
-    const findTodo = todos.find(t=> t.id === checkId);
-    // console.log(findTodo);
+function checkTodo(e) {
+    const checkId = Number(e.target.dataset.todoId);
+    const todos = getTodos();
+    const todo = todos.find((t) => t.id === checkId);
+    if (!todo) return;
+    todo.isComplete = !todo.isComplete;
+    saveTodos(todos);
+    filterTodos();
+}
+
+function updateTodo(e) {
+    editingTodoId = Number(e.target.dataset.todoId);
+    const findTodo = getTodos().find((t) => t.id === editingTodoId);
+    if (!findTodo) return;
+
     updateModal.classList.remove("hide");
     inputTitle.value = findTodo.title;
     todoDateCreatedData.innerText = new Date(findTodo.createdAt).toLocaleDateString("fa-IR");
-    todoUpdateOk.addEventListener('click',()=>{
-        console.log(inputTitle.value,findTodo.title);
-        findTodo.title = inputTitle.value;
-        updateModal.classList.add("hide");
-        console.log(todos);
-        saveTodos(todos);
-        filterTodos()
-    })
+    inputTitle.focus();
 }
 
+function saveEditedTodo() {
+    const title = inputTitle.value.trim();
+    if (editingTodoId === null || !title) return;
 
-function updateUiTodo(todos){
+    const todos = getTodos();
+    const findTodo = todos.find((t) => t.id === editingTodoId);
+    if (!findTodo) return;
+
+    findTodo.title = title;
+    saveTodos(todos);
+    closeModal();
+    filterTodos();
+}
+
+function updateUiTodo(todos) {
     let result = "";
-    todos.forEach((t)=>{
+    todos.forEach((t) => {
         result += `<div class="todo shadow ${t.isComplete ? "complete" : ""}">
-          <p>${t.title}</p>
+          <p>${escapeHtml(t.title)}</p>
             <div class="todo__detail">
-                <span>${new Date(t.createdAt).toLocaleDateString("fa-IR",{
-                    hour :"2-digit",
-                    minute : "numeric",
-                    second : "2-digit",
-                    weekday :"long",
-                    year :"numeric",
-                    month:"2-digit"
+                <span>${new Date(t.createdAt).toLocaleDateString("fa-IR", {
+                    hour: "2-digit",
+                    minute: "numeric",
+                    second: "2-digit",
+                    weekday: "long",
+                    year: "numeric",
+                    month: "2-digit"
                 })}</span>
-                <img src="../assets/images/icon/edit.png" alt="" class="update-todo" data-todo-id="${t.id}">
-                <img src="../assets/images/icon/check.png" alt="" class="check-todo" data-todo-id="${t.id}">
-                <img src="../assets/images/icon/trash.png" alt="" class="delete-todo" data-todo-id="${t.id}">
+                <img src="../assets/images/icon/edit.png" alt="ویرایش" class="update-todo" data-todo-id="${t.id}">
+                <img src="../assets/images/icon/check.png" alt="انجام شد" class="check-todo" data-todo-id="${t.id}">
+                <img src="../assets/images/icon/trash.png" alt="حذف" class="delete-todo" data-todo-id="${t.id}">
             </div>
         </div>`;
+    });
 
-    })
     todosBox.innerHTML = result;
-    todoInput.value = "";
-    const delBtns = document.querySelectorAll(".delete-todo");
-    const checkBtns = document.querySelectorAll(".check-todo");
-    const updateBtns = document.querySelectorAll(".update-todo");
-    delBtns.forEach(b=>{
-        b.addEventListener('click',delTodo)
-    })
-    checkBtns.forEach(b=>{
-        b.addEventListener('click',checkTodo)
-    })
-    updateBtns.forEach(b=>{
-        b.addEventListener('click',updateTodo)
-    })
+
+    todosBox.querySelectorAll(".delete-todo").forEach((b) => {
+        b.addEventListener("click", delTodo);
+    });
+    todosBox.querySelectorAll(".check-todo").forEach((b) => {
+        b.addEventListener("click", checkTodo);
+    });
+    todosBox.querySelectorAll(".update-todo").forEach((b) => {
+        b.addEventListener("click", updateTodo);
+    });
 }
 
-
-function getTodos(){
-   return JSON.parse(localStorage.getItem("todos")) || [];
+function getTodos() {
+    return JSON.parse(localStorage.getItem("todos")) || [];
 }
-function saveTodos(todos){
-    localStorage.setItem("todos",JSON.stringify(todos));
+
+function saveTodos(todos) {
+    localStorage.setItem("todos", JSON.stringify(todos));
 }

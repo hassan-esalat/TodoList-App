@@ -18,7 +18,8 @@ body {
   font-size: 1.6rem;
 }
 .app {
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   overflow: hidden;
@@ -58,8 +59,9 @@ body {
 
 .formTodo {
   padding: 2rem;
-  width: 600px;
+  width: min(600px, calc(100% - 2rem));
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
   margin-top: -50px;
@@ -98,7 +100,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 570px;
+  width: min(570px, calc(100% - 2rem));
   padding: 2rem;
   border-radius: 5px;
   margin-block: 1.5rem;
@@ -163,7 +165,7 @@ body {
 
 .update-modal {
   position: absolute;
-  width: 400px;
+  width: min(400px, 90%);
   /* height: 250px; */
   background-color: #ff33ad42;
   z-index: 10;
@@ -218,4 +220,35 @@ body {
 }
 .update-btn button:hover {
   opacity: 0.9;
+}
+
+/* responsive */
+@media (max-width: 640px) {
+  .container {
+    margin: 16px auto;
+    padding-inline: 8px;
+  }
+  .app__header {
+    height: 100px;
+  }
+  .formTodo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .todo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .todo > p,
+  .todo.complete p {
+    width: 100%;
+  }
+  .todo__detail {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .todo__detail span {
+    margin-left: 0;
+  }
 }
