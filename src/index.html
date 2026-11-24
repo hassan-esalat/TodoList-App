@@ -3,32 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../src/css/fonts.css">
-    <link rel="stylesheet" href="../src/css/style.css">
-    <title>TodoList app</title>
+    <link rel="stylesheet" href="css/fonts.css?v=2">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <title>لیست کارهای من</title>
 </head>
 <body>
     
      <div class="container app">
-        <div class="app__header"></div>
+        <div class="app__header">
+            <h1 class="app__title">📝 لیست کارهای من</h1>
+            <p class="app__subtitle">کارهات رو بنویس، انجام بده و لذت ببر ✨</p>
+            <p class="app__stats"><span class="stats-done">0</span> از <span class="stats-total">0</span> کار انجام شده</p>
+        </div>
 
         <div class="app__content">
               <div class="update-modal hide">
-                <h3>ویرایش</h3>
-                
-                <div class="update-header">
-                    <label>عنوان :</label>
-                    <input type="text" class="input-val-update">
-                </div>
-                <p class="todo-date-created">
-                    <span>تاریخ ایجاد :</span>
-                    <span class="todo-date-created__data">1400</span>
-                </p>
-                <div class="update-btn">
-                    <button class="btn btn--primary todo-update-ok">ویرایش</button>
-                    <button class="btn btn--primary todo-exit">انصراف</button>
-                </div>
+                <div class="update-modal__card">
+                  <h3>ویرایش کار</h3>
 
+                  <div class="update-header">
+                      <label>عنوان :</label>
+                      <input type="text" class="input-val-update" placeholder="عنوان کار...">
+                  </div>
+                  <p class="todo-date-created">
+                      <span>تاریخ ایجاد :</span>
+                      <span class="todo-date-created__data">1400</span>
+                  </p>
+                  <div class="update-btn">
+                      <button type="button" class="btn btn--primary todo-update-ok">ویرایش</button>
+                      <button type="button" class="btn btn--ghost todo-exit">انصراف</button>
+                  </div>
+                </div>
               </div>
             <div class="todo-app">
                 <form action="#" class="formTodo shadow">
@@ -41,7 +46,7 @@
                     </div>
                     <div>
                         <label>اضافه کردن کار جدید :</label>
-                        <input type="text" class="todoInput" autofocus>
+                        <input type="text" class="todoInput" placeholder="مثال: خرید شیر از سوپرمارکت..." autofocus>
                     </div>
                     <button class="btn btn--primary add-todo-btn">افزودن</button>
                 </form>
@@ -59,6 +64,6 @@
         </div>
     </div> 
 
-    <script src="./js/app.js"></script>
+    <script src="./js/app.js?v=2"></script>
 </body>
 </html>
